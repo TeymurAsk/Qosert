@@ -1,0 +1,31 @@
+﻿@page "/"
+@inject FileService fileservice
+<PageTitle>Home</PageTitle>
+
+<div>
+    <p>Upload Contacts</p>
+    <InputFile OnChange="OnInputFileChange" accept=".csv,.xls,.xlsx" />
+    <button @onclick="ProcessFile" disabled="@(!isFileSelected)">Continue</button>
+    <p>@results</p>
+</div>
+
+@code{
+    public IBrowserFile file { get; set; }
+    private bool isFileSelected = false;
+    private List<Contact> results;
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        file = e.File;
+        isFileSelected = file != null;
+    }
+    private async Task ProcessFile()
+    {
+        if (file == null) return;
+        using var memoryStream = new MemoryStream();
+        await file.OpenReadStream().CopyToAsync(memoryStream);
+        using var stream = file.OpenReadStream();
+        memoryStream.Position = 0;
+        results = fileservice.GetContacts(memoryStream);
+    }
+
+}

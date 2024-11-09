@@ -1,0 +1,25 @@
+﻿@page "/register"
+@inject AuthService authservice
+@inject IHttpContextAccessor contextaccessor
+<h1 style="text-align:center;">Emergency Notification System</h1>
+<div style="margin-top:6rem;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+    <label>Email</label>
+    <input type="email" @bind="Email"/>
+    <label>Phone number</label>
+    <input type="text" @bind="PhoneNumber" />
+    <label>Password</label>
+    <input type="text" @bind="Password"/>
+    <button style="margin-top:1rem" @onclick="()=>RegisterUser()">Register</button>
+    <p>@Output</p>
+</div>
+
+@code {
+    public string Email { get; set; }
+    public string Password { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Output { get; set; }
+    private void RegisterUser()
+    {
+        Output = authservice.Register(Email, Password, PhoneNumber, contextaccessor.HttpContext);
+    }
+}

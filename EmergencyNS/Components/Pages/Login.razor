@@ -1,0 +1,15 @@
+﻿@page "/login"
+@inject IHttpContextAccessor contextaccessor
+<h1 style="text-align:center;">Emergency Notification System</h1>
+<div style="margin-top:6rem;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+    <label>Email</label>
+    <input type="email"/>
+    <label>Password</label>
+    <input type="text"/>
+    <button style="margin-top:1rem">Login</button>
+</div>
+@code {
+    public string Email { get; set; }
+    public string Password { get; set; }
+
+}
