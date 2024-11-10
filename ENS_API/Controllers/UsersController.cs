@@ -27,7 +27,7 @@ namespace ENS_API.Controllers
         [HttpGet("{id}")]
         public User Get(string id)
         {
-            return _context.Users.Find(id);
+            return _context.Users.Find(Guid.Parse(id));
         }
 
         // POST api/<UsersController>
@@ -46,7 +46,7 @@ namespace ENS_API.Controllers
         [HttpDelete("{id}")]
         public void Delete(string id)
         {
-            _context.Users.Remove(_context.Users.Find(id));
+            _context.Users.Remove(_context.Users.Find(Guid.Parse(id)));
         }
     }
 }

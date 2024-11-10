@@ -1,6 +1,6 @@
 ﻿@page "/"
 @inject FileService fileservice
-@inject JSRuntime JS
+@inject IJSRuntime JS
 <PageTitle>Home</PageTitle>
 
 <div>
@@ -28,7 +28,7 @@
         memoryStream.Position = 0;
         var token = await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
 
-        results = fileservice.GetContacts(memoryStream, token);
+        fileservice.GetContacts(memoryStream, token);
 
     }
 

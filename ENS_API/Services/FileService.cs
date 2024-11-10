@@ -10,7 +10,14 @@ namespace ENS_API.Services
 {
     public class FileService
     {
-        public List<Contact> GetContacts(Stream fileStream, string token)
+        private readonly ENSDbContext _context;
+        public FileService(ENSDbContext context)
+        {
+
+            _context = context;
+
+        }
+        public void GetContacts(Stream fileStream, string token)
         {
             var userID = DecodeJwt(token);
 
@@ -42,20 +49,26 @@ namespace ENS_API.Services
                                 Email = reader.GetString(0) ?? string.Empty,
                                 PhoneNumber = reader.GetValue(1).ToString() ?? string.Empty,
                                 PreferredMethod = reader.GetValue(2).ToString() ?? string.Empty,
+                                FirstName = reader.GetValue(3).ToString() ?? string.Empty,
+                                LastName = reader.GetValue(4).ToString() ?? string.Empty,
+                                User = _context.Users.Find(Guid.Parse(userID)),
+                                UserId = Guid.Parse(userID),
                             };
                             contacts.Add(contact);
                         }
                     }
                 } while (reader.NextResult());
             }
-            return contacts;
+            _context.Users.Find(Guid.Parse(userID)).Contacts = contacts;
+            _context.Contacts.AddRange(contacts);
+            _context.SaveChanges();
         }
         public string DecodeJwt(string token)
         {
             var handler = new JwtSecurityTokenHandler();
             var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
 
-            var claim = jsonToken.Claims.Last();
+            var claim = jsonToken.Claims.First();
             var userid = claim.Value;
             return userid;
         }
