@@ -14,7 +14,7 @@ namespace ENS_API.Services
             _jwtProvider = jWTProvider;
             _dbContext = dbContext;
         }
-        public string Register(string email, string password,string phone_number, HttpContext context)
+        public string Register(string email, string password,string phone_number)
         {
             if((_dbContext.Users.SingleOrDefault(u => u.Email == email)!=null) || (_dbContext.Users.SingleOrDefault(u => u.PhoneNumber == phone_number) != null))
             {
@@ -30,17 +30,12 @@ namespace ENS_API.Services
             };
             _dbContext.Users.Add(newuser);
             _dbContext.SaveChanges();
-            Login(email, password, context);
-            return "All's good";
+            return Login(email, password);
         }
-        public void Login(string email, string password, HttpContext context)
+        public string Login(string email, string password)
         {
             var token = CreateJWT(email, password);
-            context.Response.Cookies.Append("tasty-users-cookies", token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true
-            });
+            return token;
         }
         public string CreateJWT(string email, string password)
         {

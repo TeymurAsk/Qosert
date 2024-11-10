@@ -1,6 +1,8 @@
 ﻿using ENS_API.Data;
 using ExcelDataReader;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.JSInterop;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Text;
 
@@ -8,8 +10,10 @@ namespace ENS_API.Services
 {
     public class FileService
     {
-        public List<Contact> GetContacts(Stream fileStream)
+        public List<Contact> GetContacts(Stream fileStream, string token)
         {
+            var userID = DecodeJwt(token);
+
             var contacts = new List<Contact>();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
@@ -45,6 +49,15 @@ namespace ENS_API.Services
                 } while (reader.NextResult());
             }
             return contacts;
+        }
+        public string DecodeJwt(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+
+            var claim = jsonToken.Claims.Last();
+            var userid = claim.Value;
+            return userid;
         }
     }
 }

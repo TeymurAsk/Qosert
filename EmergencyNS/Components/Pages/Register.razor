@@ -1,6 +1,7 @@
 ﻿@page "/register"
 @inject AuthService authservice
-@inject IHttpContextAccessor contextaccessor
+@inject IJSRuntime JS
+@inject NavigationManager navman
 <h1 style="text-align:center;">Emergency Notification System</h1>
 <div style="margin-top:6rem;display:flex;flex-direction:column;justify-content:center;align-items:center;">
     <label>Email</label>
@@ -20,6 +21,8 @@
     public string Output { get; set; }
     private void RegisterUser()
     {
-        Output = authservice.Register(Email, Password, PhoneNumber, contextaccessor.HttpContext);
+        var token = authservice.Register(Email, Password, PhoneNumber);
+        JS.InvokeVoidAsync("localStorage.setItem", "authToken", token);
+        navman.NavigateTo("/");
     }
 }

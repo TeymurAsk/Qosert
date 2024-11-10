@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ENS_API.Data;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,18 +9,25 @@ namespace ENS_API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly ENSDbContext _context;
+        public UsersController(ENSDbContext context)
+        {
+
+            _context = context;
+
+        }
         // GET: api/<UsersController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<User> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _context.Users.ToList();
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public User Get(string id)
         {
-            return "value";
+            return _context.Users.Find(id);
         }
 
         // POST api/<UsersController>
@@ -36,8 +44,9 @@ namespace ENS_API.Controllers
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
+            _context.Users.Remove(_context.Users.Find(id));
         }
     }
 }

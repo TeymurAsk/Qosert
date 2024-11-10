@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject FileService fileservice
+@inject JSRuntime JS
 <PageTitle>Home</PageTitle>
 
 <div>
@@ -25,7 +26,10 @@
         await file.OpenReadStream().CopyToAsync(memoryStream);
         using var stream = file.OpenReadStream();
         memoryStream.Position = 0;
-        results = fileservice.GetContacts(memoryStream);
+        var token = await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+        results = fileservice.GetContacts(memoryStream, token);
+
     }
 
 }

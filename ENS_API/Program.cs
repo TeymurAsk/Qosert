@@ -22,7 +22,6 @@ builder.Services.AddScoped<JWTProvider>();
 // Controllers
 builder.Services.AddScoped<UsersController>();
 builder.Services.AddScoped<ContactsController>();
-builder.Services.AddScoped<AuthController>();
 
 // Authentication services
 builder.Services.AddScoped<HashGenerator>();

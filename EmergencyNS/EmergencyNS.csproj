@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\localStorageHelper.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\localStorageHelper.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ENS_API\ENS_API.csproj" />
   </ItemGroup>
 
