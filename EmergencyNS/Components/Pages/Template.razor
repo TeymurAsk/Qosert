@@ -1,6 +1,86 @@
 ﻿@page "/template"
+@inject IJSRuntime JS
+@inject ENSDbContext dbcontext
 <h1 style="text-align:center">Emergensy Notification System</h1>
+<div style="margin-top:6rem;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+    <textarea style="width:600px;height:300px;resize:none" @bind="TemplateText"></textarea>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all" @onclick="()=>SelectAll()"></th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Email</th>
+                    <th>Phone number</th>
+                    <th>Preferable Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var contact in contacts)
+                {
+                    <tr>
+                        <td><input type="checkbox" class="row-checkbox" @onclick="()=>SelectContact(contact.UserId)"></td>
+                        <td>@contact.FirstName</td>
+                        <td>@contact.LastName</td>
+                        <td>@contact.Email</td>
+                        <td>@contact.PhoneNumber</td>
+                        <td>@if(contact.PreferredMethod == "1")
+                                @("Email")
+                            else if (contact.PreferredMethod == "2")
+                                @("Phone number")
+                            else
+                                @("Email, Phone number")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <button style="width:100%;height:40px;" @onclick="()=>UploadNotifications()">Send Notification</button>
+    </div>
+</div>
 
 @code {
+    public string TemplateText { get; set; }
+    private List<Contact> contacts = new List<Contact>();
+    private List<Guid> selectedContacts = new List<Guid>();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var token = await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+        var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        var jsonToken = handler.ReadToken(token) as System.IdentityModel.Tokens.Jwt.JwtSecurityToken;
 
+        var claim = jsonToken.Claims.First();
+        var userid = claim.Value;
+        contacts = (dbcontext.Contacts.Where(x => x.UserId == Guid.Parse(userid))).ToList();
+        JS.InvokeVoidAsync("initializeCheckboxes");
+        StateHasChanged();
+    }
+
+    public void SelectContact(Guid guid)
+    {
+        if (selectedContacts.Contains(guid))
+        {
+            selectedContacts.Remove(guid);
+        }
+        else
+        {
+            selectedContacts.Add(guid);
+        }
+    }
+    public void SelectAll()
+    {
+        if(selectedContacts.Count != contacts.Count)
+        {
+            selectedContacts = contacts.Select(x => x.Id).ToList();
+        }
+        else
+        {
+            selectedContacts.Clear();
+        }
+    }
+    public void UploadNotifications()
+    {
+        
+    }
 }

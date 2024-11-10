@@ -49,3 +49,48 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+.table-container {
+    width: 1000px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    font-weight: normal;
+}
+
+thead th {
+    background-color: black;
+    color: ghostwhite;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+thead th:first-child, tbody td:first-child {
+    text-align: center;
+    width: 40px;
+}
+
+thead th {
+    font-size: 16px;
+}
+
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    background-color:ghostwhite;
+}
