@@ -11,6 +11,7 @@ namespace ENS_API.Data
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()

@@ -59,7 +59,8 @@ namespace ENS_API.Services
                     }
                 } while (reader.NextResult());
             }
-            _context.Users.Find(Guid.Parse(userID)).Contacts = contacts;
+            var existingContacts = _context.Contacts.Where(c => c.UserId == Guid.Parse(userID)).ToList();
+            _context.Contacts.RemoveRange(existingContacts);
             _context.Contacts.AddRange(contacts);
             _context.SaveChanges();
         }

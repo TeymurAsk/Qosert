@@ -1,6 +1,7 @@
 ﻿@page "/template"
 @inject IJSRuntime JS
 @inject ENSDbContext dbcontext
+@inject NavigationManager navman
 <h1 style="text-align:center">Emergensy Notification System</h1>
 <div style="margin-top:6rem;display:flex;flex-direction:column;justify-content:center;align-items:center;">
     <textarea style="width:600px;height:300px;resize:none" @bind="TemplateText"></textarea>
@@ -20,7 +21,7 @@
                 @foreach(var contact in contacts)
                 {
                     <tr>
-                        <td><input type="checkbox" class="row-checkbox" @onclick="()=>SelectContact(contact.UserId)"></td>
+                        <td><input type="checkbox" class="row-checkbox" @onclick="()=>SelectContact(contact)"></td>
                         <td>@contact.FirstName</td>
                         <td>@contact.LastName</td>
                         <td>@contact.Email</td>
@@ -43,7 +44,8 @@
 @code {
     public string TemplateText { get; set; }
     private List<Contact> contacts = new List<Contact>();
-    private List<Guid> selectedContacts = new List<Guid>();
+    private List<Contact> selectedContacts = new List<Contact>();
+    private List<Notification> notifications = new List<Notification>();
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         var token = await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
@@ -57,22 +59,22 @@
         StateHasChanged();
     }
 
-    public void SelectContact(Guid guid)
+    public void SelectContact(Contact contact)
     {
-        if (selectedContacts.Contains(guid))
+        if (selectedContacts.Contains(contact))
         {
-            selectedContacts.Remove(guid);
+            selectedContacts.Remove(contact);
         }
         else
         {
-            selectedContacts.Add(guid);
+            selectedContacts.Add(contact);
         }
     }
     public void SelectAll()
     {
         if(selectedContacts.Count != contacts.Count)
         {
-            selectedContacts = contacts.Select(x => x.Id).ToList();
+            selectedContacts = contacts;
         }
         else
         {
@@ -81,6 +83,23 @@
     }
     public void UploadNotifications()
     {
-        
+        if (selectedContacts.Count == 0)
+        {
+            return ;
+        }
+        foreach(var selected in selectedContacts)
+        {
+            notifications.Add(new Notification
+            {
+                NotificationId = Guid.NewGuid(),
+                Text = TemplateText,
+                PhoneNumber = selected.PhoneNumber,
+                Email = selected.Email,
+                Status = false,
+            });
+        }
+        dbcontext.Notifications.AddRange(notifications);
+        dbcontext.SaveChanges();
+        navman.NavigateTo("/");
     }
 }

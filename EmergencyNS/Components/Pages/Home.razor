@@ -1,6 +1,7 @@
 ﻿@page "/"
 @inject FileService fileservice
 @inject IJSRuntime JS
+@inject NavigationManager navman
 <PageTitle>Home</PageTitle>
 
 <div>
@@ -29,7 +30,7 @@
         var token = await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
 
         fileservice.GetContacts(memoryStream, token);
-
+        navman.NavigateTo("/template");
     }
 
 }
