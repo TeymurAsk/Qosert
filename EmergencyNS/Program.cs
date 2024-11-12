@@ -5,6 +5,7 @@ using ENS_API.Services;
 using ENS_API.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using ENS_API.Workers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddRazorComponents()
 // Adding API
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddSingleton<EmailService>();
 builder.Services.AddScoped<HashGenerator>();
 builder.Services.AddScoped<JWTProvider>();
 
@@ -22,6 +24,9 @@ builder.Services.Configure<JWTOptions>(builder.Configuration.GetSection(nameof(J
 builder.Services.AddApiAuthentication(
     builder.Services.BuildServiceProvider().GetRequiredService<IOptions<JWTOptions>>()
 );
+
+// Registration of backgroud worker
+builder.Services.AddHostedService<NotificationWorker>();
 
 builder.Services.AddHttpContextAccessor();
 

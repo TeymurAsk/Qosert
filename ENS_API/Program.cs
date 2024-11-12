@@ -2,6 +2,7 @@ using ENS_API.Controllers;
 using ENS_API.Data;
 using ENS_API.Extensions;
 using ENS_API.Services;
+using ENS_API.Workers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -19,9 +20,13 @@ builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<HashGenerator>();
 builder.Services.AddScoped<JWTProvider>();
+builder.Services.AddSingleton<EmailService>();
 // Controllers
 builder.Services.AddScoped<UsersController>();
 builder.Services.AddScoped<ContactsController>();
+
+// Registration of backgroud worker
+builder.Services.AddHostedService<NotificationWorker>();
 
 // Authentication services
 builder.Services.AddScoped<HashGenerator>();
