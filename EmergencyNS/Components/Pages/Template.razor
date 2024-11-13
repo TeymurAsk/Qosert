@@ -2,6 +2,7 @@
 @inject IJSRuntime JS
 @inject ENSDbContext dbcontext
 @inject NavigationManager navman
+@inject KafkaProducerService kafkaproduce
 <h1 style="text-align:center">Emergensy Notification System</h1>
 <div style="margin-top:6rem;display:flex;flex-direction:column;justify-content:center;align-items:center;">
     <textarea style="width:600px;height:300px;resize:none" @bind="TemplateText"></textarea>
@@ -100,6 +101,7 @@
         }
         dbcontext.Notifications.AddRange(notifications);
         dbcontext.SaveChanges();
+        kafkaproduce.SendMessageAsync(notifications);
         navman.NavigateTo("/");
     }
 }

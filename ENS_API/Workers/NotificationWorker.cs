@@ -1,35 +1,52 @@
-﻿using ENS_API.Data;
+﻿using Confluent.Kafka;
+using ENS_API.Data;
 using ENS_API.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace ENS_API.Workers
 {
     public class NotificationWorker : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;
-        public NotificationWorker(IServiceProvider serviceProvider)
+        private readonly string _bootstrapServers;
+        private readonly string _topic;
+        private readonly string _groupId;
+        public NotificationWorker(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             _serviceProvider = serviceProvider;
+            _bootstrapServers = configuration["Kafka:BootstrapServers"];
+            _topic = configuration["Kafka:Topic"];
+            _groupId = configuration["Kafka:GroupId"];
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var config = new ConsumerConfig
+            {
+                BootstrapServers = _bootstrapServers,
+                GroupId = _groupId,
+                AutoOffsetReset = AutoOffsetReset.Earliest
+            };
+            using var consumer = new ConsumerBuilder<Null, string>(config).Build();
+            consumer.Subscribe(_topic);
             while (!stoppingToken.IsCancellationRequested)
             {
-                using (var scope = _serviceProvider.CreateScope())
+                var consumeResult = consumer.Consume(TimeSpan.FromSeconds(5));
+                if (consumeResult != null)
                 {
-                    var _context = scope.ServiceProvider.GetRequiredService<ENSDbContext>();
-                    var _emailService = scope.ServiceProvider.GetRequiredService<EmailService>();
-                    var notifications = _context.Notifications.Where(x => x.Status == false).ToList();
-                    foreach (var notification in notifications)
+                    using (var scope = _serviceProvider.CreateScope())
                     {
-                        await _emailService.SendEmailAsync(notification.Email, "ENS(built by Tim)", notification.Text);
-                        _context.Notifications.Find(notification.NotificationId).Status = true;
-                        _context.SaveChanges();
+                        var message = JsonConvert.DeserializeObject<Notification>(consumeResult.Message.Value);
+                        var _context = scope.ServiceProvider.GetRequiredService<ENSDbContext>();
+                        var _emailService = scope.ServiceProvider.GetRequiredService<EmailService>();
+
+                        await _emailService.SendEmailAsync(message.Email, "ENS(built by Tim)", message.Text);
+                        _context.Notifications.Find(message.NotificationId).Status = true;
+                        await _context.SaveChangesAsync();
+                        await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
                     }
-                    _context.Notifications.RemoveRange(notifications);
-                    _context.SaveChanges();
-                    await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
                 }
+                await Task.Delay(TimeSpan.FromSeconds(40), stoppingToken);
             }
         }
     }
