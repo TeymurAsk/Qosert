@@ -19,6 +19,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddSingleton<EmailService>();
 builder.Services.AddScoped<HashGenerator>();
 builder.Services.AddScoped<JWTProvider>();
+builder.Services.AddSingleton<KafkaProducerService>();
 
 builder.Services.Configure<JWTOptions>(builder.Configuration.GetSection(nameof(JWTOptions)));
 builder.Services.AddApiAuthentication(

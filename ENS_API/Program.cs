@@ -21,6 +21,7 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<HashGenerator>();
 builder.Services.AddScoped<JWTProvider>();
 builder.Services.AddSingleton<EmailService>();
+builder.Services.AddSingleton<KafkaProducerService>();
 // Controllers
 builder.Services.AddScoped<UsersController>();
 builder.Services.AddScoped<ContactsController>();
