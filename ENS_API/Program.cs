@@ -26,8 +26,9 @@ builder.Services.AddSingleton<KafkaProducerService>();
 builder.Services.AddScoped<UsersController>();
 builder.Services.AddScoped<ContactsController>();
 
-// Registration of backgroud worker
+// Registration of background workers
 builder.Services.AddHostedService<NotificationWorker>();
+builder.Services.AddHostedService<NotificationCleanUpWorker>();
 
 // Authentication services
 builder.Services.AddScoped<HashGenerator>();

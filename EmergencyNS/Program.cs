@@ -26,8 +26,9 @@ builder.Services.AddApiAuthentication(
     builder.Services.BuildServiceProvider().GetRequiredService<IOptions<JWTOptions>>()
 );
 
-// Registration of backgroud worker
+// Registration of background workers
 builder.Services.AddHostedService<NotificationWorker>();
+builder.Services.AddHostedService<NotificationCleanUpWorker>();
 
 builder.Services.AddHttpContextAccessor();
 
