@@ -46,7 +46,10 @@ namespace ENS_API.Workers
                         await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
                     }
                 }
-                await Task.Delay(TimeSpan.FromSeconds(40), stoppingToken);
+                else
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(40), stoppingToken);
+                }
             }
         }
     }

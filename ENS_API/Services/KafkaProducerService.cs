@@ -25,11 +25,9 @@ namespace ENS_API.Services
                 try
                 {
                     var result = await producer.ProduceAsync(_topic, new Message<Null, string> { Value = jsonMessage });
-                    Console.WriteLine($"Message sent to Kafka: {result.Value}");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to send message: {ex.Message}");
                 }
             }
         }
