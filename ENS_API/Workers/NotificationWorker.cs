@@ -31,7 +31,7 @@ namespace ENS_API.Workers
             consumer.Subscribe(_topic);
             while (!stoppingToken.IsCancellationRequested)
             {
-                var consumeResult = consumer.Consume(TimeSpan.FromSeconds(5));
+                var consumeResult = consumer.Consume(TimeSpan.FromSeconds(1));
                 if (consumeResult != null)
                 {
                     using (var scope = _serviceProvider.CreateScope())
@@ -43,7 +43,7 @@ namespace ENS_API.Workers
                         await _emailService.SendEmailAsync(message.Email, "ENS(built by Tim)", message.Text);
                         _context.Notifications.Find(message.NotificationId).Status = true;
                         await _context.SaveChangesAsync();
-                        await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                        await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
                     }
                 }
                 await Task.Delay(TimeSpan.FromSeconds(40), stoppingToken);
