@@ -6,19 +6,34 @@
 <p class="home-title">Qosert</p>
 <div class="center-div">
     <div class="file-upload-area">
-        <InputFile OnChange="OnInputFileChange" class="input-file" accept=".csv,.xls,.xlsx" />
+        <InputFile OnChange="OnInputFileChange" id="fileInput" class="input-file" accept=".csv,.xls,.xlsx" style="display:none" />
+        <label for="fileInput" class="custom-upload-area">
+            @if (filename!=null)
+            {
+                @filename
+            }
+            else
+            {
+                @text
+            }
+        </label>
     </div>
 </div>
-<button @onclick="ProcessFile" disabled="@(!isFileSelected)">Continue</button>
-<p>@results</p>
+<div class="center-div" style="margin-top:1rem;">
+    <button @onclick="ProcessFile" class="btn-continue" disabled="@(!isFileSelected)">Continue</button>
+</div>
 @code{
     public IBrowserFile file { get; set; }
     private bool isFileSelected = false;
     private List<Contact> results;
+    private string filename;
+    private string text = "Click here to upload the file";
     private async Task OnInputFileChange(InputFileChangeEventArgs e)
     {
         file = e.File;
         isFileSelected = file != null;
+        filename = file.Name;
+
     }
     private async Task ProcessFile()
     {
