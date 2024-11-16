@@ -59,26 +59,25 @@ h1:focus {
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 8px;
+    background-color: black;
     overflow: hidden;
 }
 
 th, td {
     padding: 10px;
     text-align: center;
-    border: 1px solid #ddd;
+    border: 1px solid blue;
     font-weight: normal;
 }
 
 thead th {
-    background-color: black;
-    color: ghostwhite;
+    background-color: darkblue;
+    color: white;
     font-weight: bold;
 }
 
 tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #353535;
 }
 
 thead th:first-child, tbody td:first-child {
@@ -164,3 +163,16 @@ input[type="checkbox"] {
         color: black;
         background-color: blue;
     }
+.txtarea {
+    width: 800px;
+    height: 300px;
+    resize: none;
+    border-radius: 1rem;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+    border: 6px solid blue;
+    background-color: black;
+    color: white;
+    box-shadow: 0 0 30px blue; /* The shadow */
+}
