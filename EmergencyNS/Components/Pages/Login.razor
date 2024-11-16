@@ -2,13 +2,13 @@
 @inject AuthService authservice
 @inject IJSRuntime JS
 @inject NavigationManager navman
-<h1 style="text-align:center;">Emergency Notification System</h1>
+<h1 style="text-align:center;margin-top:2rem;">Qosert</h1>
 <div style="margin-top:6rem;display:flex;flex-direction:column;justify-content:center;align-items:center;">
     <label>Email</label>
     <input type="email" @bind="Email"/>
     <label>Password</label>
     <input type="text" @bind="Password" />
-    <button style="margin-top:1rem" @onclick="()=>LoginUser()">Login</button>
+    <button style="margin-top:1rem" class="btn-login" @onclick="()=>LoginUser()">Login</button>
 </div>
 @code {
     public string Email { get; set; }

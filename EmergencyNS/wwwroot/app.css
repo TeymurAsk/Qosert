@@ -148,3 +148,19 @@ input[type="checkbox"] {
         color: black;
         background-color: blue;
     }
+.btn-login {
+    width:200px;
+    height: 40px;
+    color: white;
+    background-color: black;
+    border: 4px solid blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    border-radius: 1rem;
+}
+    .btn-login:hover {
+        color: black;
+        background-color: blue;
+    }
