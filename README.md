@@ -18,7 +18,7 @@ Qosert is a web application for people to send different kinds of notifications 
 ## Getting Started
 
 ### Clone the repository
-Clone the repo to get access to the code and provide in you IDE.
+Clone the repo to get access to the code and provide in you IDE. During first run, go to the page /register and create an account.
 ### Usage
 1. You will need to run docker-compose file on your machine. **(Install Docker beforehand, all used ports are mentioned in docker-compose)**
 2. You might need run migrations of the Database in your IDE after cloning the code.
