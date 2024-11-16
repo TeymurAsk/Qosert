@@ -3,14 +3,14 @@
 @inject IJSRuntime JS
 @inject NavigationManager navman
 <PageTitle>Home</PageTitle>
-
-<div>
-    <p>Upload Contacts</p>
-    <InputFile OnChange="OnInputFileChange" accept=".csv,.xls,.xlsx" />
-    <button @onclick="ProcessFile" disabled="@(!isFileSelected)">Continue</button>
-    <p>@results</p>
+<p class="home-title">Qosert</p>
+<div class="center-div">
+    <div class="file-upload-area">
+        <InputFile OnChange="OnInputFileChange" class="input-file" accept=".csv,.xls,.xlsx" />
+    </div>
 </div>
-
+<button @onclick="ProcessFile" disabled="@(!isFileSelected)">Continue</button>
+<p>@results</p>
 @code{
     public IBrowserFile file { get; set; }
     private bool isFileSelected = false;

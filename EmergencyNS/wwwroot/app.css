@@ -1,5 +1,7 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color:black;
+    color:white;
 }
 
 a, .btn-link {
@@ -93,4 +95,29 @@ input[type="checkbox"] {
     height: 16px;
     cursor: pointer;
     background-color:ghostwhite;
+}
+.home-title{
+    font-size: 4rem;
+    text-align:center;
+    margin-top:2rem;
+}
+.file-upload-area{
+    width:800px;
+    height:400px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background-color:black;
+    color:white;
+    border: 6px dashed blue;
+    border-radius:2rem;
+}
+.center-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.input-file{
+    width:inherit;
+    height:inherit;
 }
